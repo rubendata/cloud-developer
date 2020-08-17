@@ -2,6 +2,8 @@ import { Router, Request, Response } from 'express';
 import { FeedItem } from '../models/FeedItem';
 import { requireAuth } from '../../users/routes/auth.router';
 import * as AWS from '../../../../aws';
+import { Request } from 'aws-sdk';
+import { where } from 'sequelize';
 
 const router: Router = Router();
 
@@ -18,13 +20,34 @@ router.get('/', async (req: Request, res: Response) => {
 
 //@TODO
 //Add an endpoint to GET a specific resource by Primary Key
+router.get("/:id", async( req: Request, res: Response) => {
+    let {id} = req.params;
+    
+    if(!id) {
+       return res.status(400).send("an ID is needed")
+    }
+    const item = await FeedItem.findAll({where: {"id":id}});
+    if(item.length===0){
+       return res.status(404).send(`no item with id: ${id} found`)
+    }
+    return res.status(200).send(item);
+    
+})
 
 // update a specific resource
 router.patch('/:id', 
     requireAuth, 
     async (req: Request, res: Response) => {
         //@TODO try it yourself
-        res.send(500).send("not implemented")
+        let {id} = req.params;
+        
+        const item = await FeedItem.findByPk(id);
+        
+        if(id){
+            item.update({caption: "mongo"}) 
+        }
+        res.status(200).send(item);
+        /*res.sendStatus(500).send("not implemented")*/
 });
 
 
