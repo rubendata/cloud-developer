@@ -9,7 +9,7 @@
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
     "prod": "tsc && node ./www/server.js",
     "clean": "rm -rf www/ || true",
-    "build": "npm run clean && tsc && cp -rf src/config www/config && cp .npmrc www/.npmrc && cp package.json www/package.json && cd www && zip -r Archive.zip . && cd ..",
+    "build": "npm run clean && tsc && cp .npmrc www/.npmrc && cp package.json www/package.json && cd www && zip -r Archive.zip . && cd ..",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -38,6 +38,7 @@
     "@types/sequelize": "^4.28.3",
     "@types/validator": "^10.11.1",
     "chai": "^4.2.0",
+    "node": "10.22.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.1.4",
     "ts-node-dev": "^1.0.0-pre.40",
