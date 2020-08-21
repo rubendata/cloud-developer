@@ -5,10 +5,13 @@ const c = config.dev;
 
 
 //Configure AWS
-if(c.aws_profile !== "DEPLOYED") {
-  var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
-  AWS.config.credentials = credentials;
-}
+var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
+AWS.config.credentials = credentials;
+
+// if(c.aws_profile !== "DEPLOYED") {
+//   var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
+//   AWS.config.credentials = credentials;
+// }
 
 export const s3 = new AWS.S3({
   signatureVersion: 'v4',
