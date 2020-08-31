@@ -1,10 +1,9 @@
-import fs, { fchmod } from 'fs';
+
 import express, { Router, Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
-import { filter } from 'bluebird';
-import { constants } from 'os';
-import { composite } from 'jimp';
+import {deleteLocalFiles, getFiles, createFile} from './util/util';
+
+
 
 (async () => {
   
@@ -33,77 +32,30 @@ import { composite } from 'jimp';
   
   /**************************************************************************** */
   
-  // Get a greeting to a specific person to demonstrate req.query
-  // > try it {{host}}/persons?name=the_name
+  
   
   app.get( "/filteredimage/", ( req: Request, res: Response ) => {
-    let { url } = req.query;
     
-    if ( !url ) {
+    let { image_url } = req.query;
+    
+    if ( !image_url ) {
       return res.status(400)
       .send(`url is required`);
     }
-    console.log(`the URL called was ${url}`);
-    async function f1() {
-      var x = await filterImageFromURL(url);
-      console.log(x);
-      res.sendfile(x);
-     
-      // console.log(files)  
-      }
-      f1();  
-      const dir = "src/util/tmp/";
-      const files = fs.readdirSync(dir);
-      for (let i=0; i<files.length; i++) {
-        files[i] =dir+files[i];
+    console.log(`the URL called was ${image_url}`);
+    
+     createFile(image_url)
+      .then((file) => res.status(200)
+        .sendFile(file, () => {
+          getFiles("src/util/tmp/")
+          .then((result) => deleteLocalFiles(result))
         
-      } 
-      
-      deleteLocalFiles(files)
-    })
-    
-    
-        
-    
-
-    // fs.readdir(dir, (err, files) => {
-    //   if (err) throw err;
-      
-    //   for (const file of files) {
-    //     let newFile = dir + file;
-    //     fs.unlink(newFile, err => {
-    //       if (err) throw err;
-    //     });
-    //   }
-    // });
-    
+          }
+        )
+      )
+   
+  })
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  //   fs.unlink('src/util/tmp/sample.txt', function (err) {
-  //     if (err) throw err;
-  //     // if no error, file has been deleted successfully
-  //     console.log('File deleted!');
-  // });
-  
-  /*
-  function()
-  await {filteredpath = filterImageFromURL(url)};
-  return res.status(200)
-  .send(res.sendFile(filteredpath));
-  */
   
   
   //! END @TODO1

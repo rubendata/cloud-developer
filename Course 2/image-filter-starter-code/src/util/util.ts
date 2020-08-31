@@ -1,6 +1,5 @@
 import fs from 'fs';
 import Jimp = require('jimp');
-import { url } from 'inspector';
 
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
@@ -11,7 +10,8 @@ import { url } from 'inspector';
 //    an absolute path to a filtered image locally saved file
 export async function filterImageFromURL(inputURL: string): Promise<string>{
     return new Promise( async resolve => {
-        const photo = await Jimp.read(inputURL);
+        try{const photo = await Jimp.read(inputURL)
+        
         const outpath = '/tmp/filtered.'+Math.floor(Math.random() * 2000)+'.jpg';
         await photo
         .resize(256, 256) // resize
@@ -19,7 +19,8 @@ export async function filterImageFromURL(inputURL: string): Promise<string>{
         .greyscale() // set greyscale
         .write(__dirname+outpath, (img)=>{
             resolve(__dirname+outpath);
-        });
+        })
+    }catch{console.log("could not create file. please check URL")};
     });
 }
 
@@ -29,8 +30,30 @@ export async function filterImageFromURL(inputURL: string): Promise<string>{
 // INPUTS
 //    files: Array<string> an array of absolute paths to files
 export async function deleteLocalFiles(files:Array<string>){
+    console.log("files to delete: "+files)
     
+    console.log("deleting files");
     for( let file of files) {
         fs.unlinkSync(file);
-    }
+    
+    
+}
+}
+
+export async function createFile(url:string) {
+    let newFile = await filterImageFromURL(url);
+    console.log("created: "+newFile);
+    return( newFile);
+    
+}
+
+export async function getFiles(path:string) {
+    console.log("start getting files")
+    const files = await fs.readdirSync(path);
+    for (let i=0; i<files.length; i++) {
+        files[i] =path+files[i];
+    } 
+    console.log("finished getting files")
+    return files;
+    
 }
