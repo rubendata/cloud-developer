@@ -1,6 +1,0 @@
-- package.json so anpassen dass man npm run build laufen lassen kann. Es muss ein korrektes www Verzeichnis erstellt werden
-- aws.ts konfigurieren
-- config.ts konfigureiren
-- require('dotenv').config() falls noch nicht vorhanden
-
-erst dann sollte eb init funktionieren
