@@ -15,9 +15,9 @@ before_script:
 
 script:
   - docker --version # print the version for logging
-  - docker build -t rubendata/udagram-api-feed .
-  - docker tag rubendata/udagram-api-feed rubendata/udagram-api-feed:latest
+  - docker build -t rubendata/udagram-api-user .
+  - docker tag rubendata/udagram-api-user rubendata/udagram-api-user:latest
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push rubendata/udagram-api-feed:latest
+  - docker push rubendata/udagram-api-user:latest
